@@ -50,8 +50,8 @@ async function translate(
 			texts: [{ text, requestAlternatives: alternativeCount }],
 			splitting: 'newlines',
 			lang: {
-				source_lang_user_selected: sourceLang.toUpperCase(),
-				target_lang: targetLang.toUpperCase()
+				source_lang_user_selected: sourceLang,
+				target_lang: targetLang
 			},
 			timestamp: getTimestamp(iCount)
 		}
@@ -67,11 +67,12 @@ async function translate(
 
 	try {
 		const response = await axios.post(DEEPL_BASE_URL, postDataStr, { headers });
-        console.log(response.data)
+		console.log(response.data);
 
 		const result = {
-            target_lang: targetLang.toUpperCase(),
-            source_lang: response.data.result.lang ?? sourceLang.toUpperCase(),
+			target_lang: targetLang.toUpperCase(),
+			source_lang: sourceLang.toUpperCase(),
+			detected_lang: response.data.result.lang,
 			text: response.data.result.texts[0].text,
 			alternatives: response.data.result.texts[0].alternatives.map(
 				(alternative: any) => alternative.text
@@ -80,18 +81,18 @@ async function translate(
 
 		return result;
 	} catch (err: any) {
-        if (err instanceof AxiosError) {
-            const {response} = err
-            if (response) {
-                if (response.status === 429) {
-                    throw new Error(
-                        `Hmmm... looks like this server gettin' a bit too popular and making too many requests to DeepL API, try again later.`
-                    );
-                }
-            }
-            
-            throw new Error(err.message)
-        }
+		if (err instanceof AxiosError) {
+			const { response } = err;
+			if (response) {
+				if (response.status === 429) {
+					throw new Error(
+						`Hmmm... looks like this server gettin' a bit too popular and making too many requests to DeepL API, try again later.`
+					);
+				}
+			}
+
+			throw new Error(err.message);
+		}
 	}
 }
 
