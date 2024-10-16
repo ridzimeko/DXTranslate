@@ -1,5 +1,13 @@
 import axios, { AxiosError } from 'axios';
 
+export interface TranslateResult {
+	target_lang: string,
+	source_lang: string,
+	detected_lang: string,
+	text: string,
+	alternatives: string[]
+}
+
 const DEEPL_BASE_URL = 'https://www2.deepl.com/jsonrpc';
 const headers = {
 	'Content-Type': 'application/json',
@@ -33,12 +41,12 @@ function getTimestamp(iCount: number): number {
 	return ts - (ts % iCount) + iCount;
 }
 
-async function translate(
+export async function translate(
 	text = 'Error: The original text cannot be empty!',
 	sourceLang = 'AUTO',
 	targetLang = 'EN',
 	alternativeCount = 0
-) {
+): Promise<TranslateResult | undefined> {
 	const iCount = getICount(text);
 	const id = getRandomNumber();
 
@@ -67,20 +75,18 @@ async function translate(
 
 	try {
 		const response = await axios.post(DEEPL_BASE_URL, postDataStr, { headers });
-		console.log(response.data);
-
-		const result = {
+		const result: TranslateResult = {
 			target_lang: targetLang.toUpperCase(),
 			source_lang: sourceLang.toUpperCase(),
 			detected_lang: response.data.result.lang,
 			text: response.data.result.texts[0].text,
 			alternatives: response.data.result.texts[0].alternatives.map(
-				(alternative: any) => alternative.text
+				(alternative: { text: string; }) => alternative.text
 			)
 		};
 
 		return result;
-	} catch (err: any) {
+	} catch (err: unknown) {
 		if (err instanceof AxiosError) {
 			const { response } = err;
 			if (response) {
@@ -95,5 +101,3 @@ async function translate(
 		}
 	}
 }
-
-export { translate };

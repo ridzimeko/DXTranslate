@@ -31,3 +31,8 @@ export const langs = [
     { code: 'UK', name: 'Ukrainian' },
     { code: 'ZH', name: 'Chinese' }
 ];
+
+export interface Langs {
+    code: string,
+    name: string
+}

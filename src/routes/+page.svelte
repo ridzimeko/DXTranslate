@@ -1,85 +1,90 @@
 <script lang="ts">
-    import { ArrowRightLeft } from 'lucide-svelte';
+	import { ArrowRightLeft } from 'lucide-svelte';
+	import { langs } from '$lib/constants/langs';
+	import debounce from '$lib/actions/debounce';
+	import type { TranslateResult } from '$lib/translate';
+	import Textarea from '$lib/components/Textarea.svelte';
+	import LangSelect from '$lib/components/LangSelect.svelte';
 
 	let text = '';
-	let result = '';
+	let translatedText = '';
+	let detectedLang = '';
+	let isLoading = false;
 
-    // Selected source and target language state
-    let current_source = 'AUTO';
-    let current_target = 'EN';
+	// Selected source and target language state
+	let source_lang = 'AUTO';
+	let target_lang = 'EN';
 
-	const langs = [
-    { code: "AUTO", name: "Auto" },
-    { code: "AR", name: "Arabic" },
-    { code: "BG", name: "Bulgarian" },
-    { code: "CS", name: "Czech" },
-    { code: "DA", name: "Danish" },
-    { code: "DE", name: "German" },
-    { code: "EL", name: "Greek" },
-    { code: "EN", name: "English" },
-    { code: "ES", name: "Spanish" },
-    { code: "ET", name: "Estonian" },
-    { code: "FI", name: "Finnish" },
-    { code: "FR", name: "French" },
-    { code: "HU", name: "Hungarian" },
-    { code: "ID", name: "Indonesian" },
-    { code: "IT", name: "Italian" },
-    { code: "JA", name: "Japanese" },
-    { code: "KO", name: "Korean" },
-    { code: "LT", name: "Lithuanian" },
-    { code: "LV", name: "Latvian" },
-    { code: "NB", name: "Norwegian" },
-    { code: "NL", name: "Dutch" },
-    { code: "PL", name: "Polish" },
-    { code: "PT", name: "Portuguese" },
-    { code: "RO", name: "Romanian" },
-    { code: "RU", name: "Russian" },
-    { code: "SK", name: "Slovak" },
-    { code: "SL", name: "Slovenian" },
-    { code: "SV", name: "Swedish" },
-    { code: "TR", name: "Turkish" },
-    { code: "UK", name: "Ukrainian" },
-    { code: "ZH", name: "Chinese" }
-];
+	async function getTranslate() {
+		if (!text) {
+			detectedLang = '';
+			translatedText = '';
+			return false;
+		}
 
-function swapLangHandler() {
-    [current_source, current_target] = [current_target, current_source]
-}
+		isLoading = true;
+		const body = {
+			source_lang,
+			target_lang,
+			text
+		};
+
+		try {
+			const res = await fetch('/api/translate', { method: 'POST', body: JSON.stringify(body) });
+			const data: TranslateResult = await res.json();
+			translatedText = data.text;
+			detectedLang = data.detected_lang;
+			isLoading = false;
+		} catch (error: any) {
+			console.error(error.message);
+			isLoading = false;
+		}
+	}
+
+	function swapLangHandler() {
+		if (source_lang.toUpperCase() === 'AUTO') {
+			source_lang = detectedLang || 'EN';
+		}
+		[source_lang, target_lang] = [target_lang, source_lang];
+		[text, translatedText] = [translatedText, text];
+	}
 </script>
 
 <main class="container">
 	<div class="lang-select">
-		<select bind:value={current_source} aria-label="Source language" required>
-			{#each langs as lang}
-                <option value="{lang.code}">{lang.name}</option>
-            {/each}
-		</select>
-        <button on:click={swapLangHandler} class="swap-button">
-            <ArrowRightLeft size="32" />
-        </button>
-        <select bind:value={current_target} aria-label="Target language" required>
-			{#each langs as lang}
-                <option value="{lang.code}">{lang.name}</option>
-            {/each}
-		</select>
+		<LangSelect bind:value={source_lang} on:change={getTranslate} {detectedLang} {langs} />
+		<button
+			on:click={swapLangHandler}
+			disabled={source_lang === 'AUTO' && !detectedLang}
+			class="swap-button"
+		>
+			<ArrowRightLeft size="32" />
+		</button>
+		<LangSelect bind:value={target_lang} on:change={getTranslate} langs={langs.slice(1)} />
 	</div>
-	<div class="grid">
-		<textarea bind:value={text} id="text" cols="30" rows="10" placeholder="Enter text..."
+	<div class="grid" style="gap: 0;">
+		<textarea
+			style="resize: none; margin: 0;"
+			use:debounce={{ value: text, func: getTranslate, duration: 750 }}
+			bind:value={text}
+			cols="30"
+			rows="10"
+			placeholder="Enter text..."
 		></textarea>
-		<textarea bind:value={result} id="text" cols="30" rows="10"></textarea>
+		<Textarea {isLoading} value={translatedText} />
 	</div>
 </main>
 
 <style scoped>
-    .lang-select {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
+	.lang-select {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
 
-    .swap-button {
-        margin-bottom: var(--pico-spacing);
-        background: transparent;
-        border: none;
-    }
+	.swap-button {
+		margin-bottom: var(--pico-spacing);
+		background: transparent;
+		border: none;
+	}
 </style>
