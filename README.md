@@ -1,38 +1,54 @@
-# create-svelte
+# DXTranslate
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)
+![Version](https://img.shields.io/badge/Version-1.0.0-orange.svg)
+![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)
 
-## Creating a project
+A simple, straightforward frontend translator powered by the DeepL API.
 
-If you're seeing this, you've probably already done this step. Congrats!
+![DXTranslate Web Screenshot](./screenshot/img.png)
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+## 💡 Why DXTranslate?
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+The official [DeepL website](https://deepl.com) can feel a bit bloated and slow at times. I wanted something lightweight and snappy. That’s why I created DXTranslate! It’s a minimalistic version that gets the job done without fuss. Plus, you don’t need an API key or token—just input your text and go! 🚀✨
 
-## Developing
+## ✨ Features
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- **Privacy First**: No ads, cookies or tracking. 🍪
+- **Token-Free**: No need for API keys; just start translating! 🔑❌
+- **Self-Host**: Want to run it on your own server? Go for it! 💻🚀
+- **Lightweight**: Fast response times without all the bloat. ⚡
 
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+## 📦 Getting Started
 
 ```bash
-npm run build
+# clone the repository
+git clone https://github.com/ridzimeko/DXTranslate.git
+
+# change project directory
+cd dxtranslate
+
+# install dependencies
+pnpm i
+
+# start dev sever
+pnpm dev
 ```
 
-You can preview the production build with `npm run preview`.
+## 🤝 Contributing
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Got ideas or want to help? Fantastic! You can follow these steps:
+
+- Fork the repo
+- Create a new branch (git checkout -b improve-feature)
+- Make the appropriate changes in the files
+- Add changes to reflect the changes made
+- Commit your changes (git commit -am 'Improve feature')
+- Push to the branch (git push origin improve-feature)
+- Create a Pull Request
+
+## 📜 License
+
+This project is licensed under the **AGPL-3.0**.
+
+Happy translating! 🌍💬
