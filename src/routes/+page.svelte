@@ -30,7 +30,7 @@
 		};
 
 		try {
-			const res = await fetch('/api/translate', { method: 'POST', body: JSON.stringify(body) });
+			const res = await fetch('/translate', { method: 'POST', body: JSON.stringify(body) });
 			const data: TranslateResult = await res.json();
 			translatedText = data.text;
 			detectedLang = data.detected_lang;
