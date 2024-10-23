@@ -24,17 +24,18 @@
 
 		isLoading = true;
 		const body = {
-			source_lang,
-			target_lang,
-			text
+			source: source_lang,
+			target: target_lang,
+			q: text
 		};
 
 		try {
-			const res = await fetch('/api/translate', { method: 'POST', body: JSON.stringify(body) });
+			const res = await fetch('/translate', { method: 'POST', body: JSON.stringify(body) });
 			const data: TranslateResult = await res.json();
-			translatedText = data.text;
-			detectedLang = data.detected_lang;
+			translatedText = data.translatedText;
+			detectedLang = data.detectedLanguage.language;
 			isLoading = false;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.error(error.message);
 			isLoading = false;
