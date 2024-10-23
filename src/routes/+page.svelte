@@ -35,6 +35,7 @@
 			translatedText = data.translatedText;
 			detectedLang = data.detectedLanguage.language;
 			isLoading = false;
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			console.error(error.message);
 			isLoading = false;
