@@ -1,11 +1,12 @@
 import axios, { AxiosError } from 'axios';
 
 export interface TranslateResult {
-	target_lang: string,
-	source_lang: string,
-	detected_lang: string,
-	text: string,
-	alternatives: string[]
+	detectedLanguage: {
+		language: string;
+		isConfident: boolean;
+	};
+	translatedText: string;
+	alternatives: string[];
 }
 
 const DEEPL_BASE_URL = 'https://www2.deepl.com/jsonrpc';
@@ -76,12 +77,13 @@ export async function translate(
 	try {
 		const response = await axios.post(DEEPL_BASE_URL, postDataStr, { headers });
 		const result: TranslateResult = {
-			target_lang: targetLang.toUpperCase(),
-			source_lang: sourceLang.toUpperCase(),
-			detected_lang: response.data.result.lang,
-			text: response.data.result.texts[0].text,
+			detectedLanguage: {
+				language: response.data.result.lang,
+				isConfident: response.data.result.lang_is_confident
+			},
+			translatedText: response.data.result.texts[0].text,
 			alternatives: response.data.result.texts[0].alternatives.map(
-				(alternative: { text: string; }) => alternative.text
+				(alternative: { text: string }) => alternative.text
 			)
 		};
 
