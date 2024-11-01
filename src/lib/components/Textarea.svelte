@@ -1,11 +1,12 @@
 <script lang="ts">
 	export let isLoading = false;
 	export let value;
+	export let label;
 </script>
 
 <div class="dx-textarea">
 	<div class={isLoading ? 'loading' : ''}></div>
-	<textarea cols="40" rows="10" {value}></textarea>
+	<textarea aria-label={label} cols="40" rows="10" {value}></textarea>
 </div>
 
 <style scoped>

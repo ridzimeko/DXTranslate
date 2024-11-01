@@ -43,7 +43,7 @@
 		</ul>
 	</nav>
 
-	<main>
+	<main style="margin-top: 0.2rem;">
 		<slot />
 	</main>
 
@@ -58,12 +58,13 @@
 	.dx-title {
 		color: var(--pico-contrast);
 		text-decoration: none;
-		font-size: 28px;
+		font-size: 1.4em;
 		font-weight: bold;
 	}
 
 	.footer-container {
 		text-align: center;
-		font-size: 16px;
+		font-size: 0.8em;
+		margin-top: 2.4rem;
 	}
 </style>

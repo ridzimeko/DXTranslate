@@ -51,17 +51,29 @@
 	}
 </script>
 
-<main class="container">
+<div>
 	<div class="lang-select">
-		<LangSelect bind:value={source_lang} on:change={getTranslate} {detectedLang} {langs} />
+		<LangSelect
+			label="Source language"
+			bind:value={source_lang}
+			on:change={getTranslate}
+			{detectedLang}
+			{langs}
+		/>
 		<button
 			on:click={swapLangHandler}
 			disabled={source_lang === 'AUTO' && !detectedLang}
 			class="swap-button"
+			title="Swap language"
 		>
 			<ArrowRightLeft size="32" />
 		</button>
-		<LangSelect bind:value={target_lang} on:change={getTranslate} langs={langs.slice(1)} />
+		<LangSelect
+			label="Target language"
+			bind:value={target_lang}
+			on:change={getTranslate}
+			langs={langs.slice(1)}
+		/>
 	</div>
 	<div class="grid" style="gap: 0;">
 		<textarea
@@ -72,9 +84,9 @@
 			rows="10"
 			placeholder="Enter text..."
 		></textarea>
-		<Textarea {isLoading} value={translatedText} />
+		<Textarea label="Translate result" {isLoading} value={translatedText} />
 	</div>
-</main>
+</div>
 
 <style scoped>
 	.lang-select {
