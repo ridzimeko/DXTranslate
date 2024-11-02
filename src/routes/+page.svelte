@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { ArrowRightLeft } from 'lucide-svelte';
 	import { langs } from '$lib/constants/langs';
-	import debounce from '$lib/actions/debounce';
 	import type { TranslateResult } from '$lib/translate';
-	import Textarea from '$lib/components/Textarea.svelte';
 	import LangSelect from '$lib/components/LangSelect.svelte';
+	import DxTextareaInput from '$lib/components/DXTextareaInput.svelte';
+	import DxTextareaResult from '$lib/components/DXTextareaResult.svelte';
 
 	let text = '';
 	let translatedText = '';
+	let alternatives: string[] = [];
 	let detectedLang = '';
 	let isLoading = false;
 
@@ -19,6 +20,7 @@
 		if (!text) {
 			detectedLang = '';
 			translatedText = '';
+			alternatives = [];
 			return false;
 		}
 
@@ -34,6 +36,7 @@
 			const data: TranslateResult = await res.json();
 			translatedText = data.translatedText;
 			detectedLang = data.detectedLanguage.language;
+			alternatives = data.alternatives;
 			isLoading = false;
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
@@ -75,16 +78,9 @@
 			langs={langs.slice(1)}
 		/>
 	</div>
-	<div class="grid" style="gap: 0;">
-		<textarea
-			style="resize: none; margin: 0;"
-			use:debounce={{ value: text, func: getTranslate, duration: 750 }}
-			bind:value={text}
-			cols="30"
-			rows="10"
-			placeholder="Enter text..."
-		></textarea>
-		<Textarea label="Translate result" {isLoading} value={translatedText} />
+	<div class="grid dxtranslate-form">
+		<DxTextareaInput bind:value={text} on:dx-input={(e) => getTranslate()} />
+		<DxTextareaResult value={translatedText} {alternatives} {isLoading} />
 	</div>
 </div>
 
@@ -99,5 +95,16 @@
 		margin-bottom: var(--pico-spacing);
 		background: transparent;
 		border: none;
+	}
+
+	.dxtranslate-form {
+		gap: 0;
+		height: 360px;
+	}
+
+	@media (max-width: 768px) {
+		.dxtranslate-form {
+			height: 512px;
+		}
 	}
 </style>
