@@ -1,23 +1,29 @@
 <script lang="ts">
+	import Alternatives from './Alternatives.svelte';
+
 	export let isLoading = false;
-	export let value;
-	export let label;
+	export let value = '';
+	export let alternatives: string[];
 </script>
 
 <div class="dx-textarea">
+	<textarea aria-label="Translation result" {value} readonly={!value}></textarea>
+	<Alternatives {alternatives} />
 	<div class={isLoading ? 'loading' : ''}></div>
-	<textarea aria-label={label} cols="40" rows="10" {value}></textarea>
 </div>
 
 <style scoped>
 	.dx-textarea {
 		position: relative;
-		height: fit-content;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
 	}
 
 	.dx-textarea textarea {
 		margin: 0;
 		resize: none;
+		flex-grow: 1;
 	}
 
 	/* From Uiverse.io by satyamchaudharydev */
