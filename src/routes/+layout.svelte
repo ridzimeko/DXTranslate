@@ -1,9 +1,12 @@
 <script>
 	import '@picocss/pico/css/pico.min.css';
 	import { Coffee, Github } from 'lucide-svelte';
-	import { browser } from '$app/environment';
+	import { browser, dev } from '$app/environment';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 
 	let baseUrl = browser ? window.location.origin : '';
+
+	injectAnalytics({ mode: dev ? 'development' : 'production' });
 </script>
 
 <svelte:head>
