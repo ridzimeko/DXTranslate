@@ -27,6 +27,16 @@
 	<meta property="og:title" content="DXTranslate" />
 	<meta property="og:type" content="website" />
 	<meta property="og:image" content="{baseUrl}/dxtranslate-banner.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:site_name" content="DXTranslate" />
+	<meta property="twitter:image" content="{baseUrl}/dxtranslate-banner.png" />
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:title" content="DXTranslate" />
+	<meta
+		property="twitter:description"
+		content="Simple DeepL translate frontend with no tracker and ads"
+	/>
 	<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
 	<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#13171f" />
 </svelte:head>
