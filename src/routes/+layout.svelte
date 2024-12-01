@@ -3,6 +3,7 @@
 	import { Coffee, Github } from 'lucide-svelte';
 	import { browser, dev } from '$app/environment';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import ThemeSwitch from '$lib/components/ThemeSwitch.svelte';
 
 	let baseUrl = browser ? window.location.origin : '';
 
@@ -31,19 +32,14 @@
 </svelte:head>
 
 <div class="container">
-	<nav style="align-items: center;">
-		<ul>
-			<li>
-				<a class="dx-title" href="/">DXTranslate</a>
-			</li>
-		</ul>
-		<ul>
-			<li>
-				<a href="https://github.com/ridzimeko/DXTranslate">
-					<Github color="#dfe3eb" aria-label="github" />
-				</a>
-			</li>
-		</ul>
+	<nav style="align-items: center; padding: 1rem 0;">
+		<a class="dx-title" href="/">DXTranslate</a>
+		<div class="navbar-icons">
+			<ThemeSwitch />
+			<a class="svg-icon" href="https://github.com/ridzimeko/DXTranslate">
+				<Github aria-label="github" />
+			</a>
+		</div>
 	</nav>
 
 	<main style="margin-top: 0.2rem;">
@@ -69,5 +65,19 @@
 		text-align: center;
 		font-size: 0.8em;
 		margin-top: 2.4rem;
+	}
+
+	.svg-icon {
+		color: var(--pico-muted-color);
+	}
+
+	.svg-icon:hover {
+		color: var(--pico-contrast);
+	}
+
+	.navbar-icons {
+		display: flex;
+		align-items: center;
+		gap: 20px;
 	}
 </style>

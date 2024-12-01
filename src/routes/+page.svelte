@@ -69,7 +69,7 @@
 			class="swap-button"
 			title="Swap language"
 		>
-			<ArrowRightLeft size="32" />
+			<ArrowRightLeft class="icon" size="32" />
 		</button>
 		<LangSelect
 			label="Target language"
@@ -94,6 +94,7 @@
 	.swap-button {
 		margin-bottom: var(--pico-spacing);
 		background: transparent;
+		color: var(--pico-muted-color);
 		border: none;
 	}
 
