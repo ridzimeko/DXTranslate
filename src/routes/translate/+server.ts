@@ -12,7 +12,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		if (Array.isArray(q)) {
 			// Handle array of texts
 			const results = await Promise.all(
-				q.map((text) => translate(text, source, target, alternatives))
+				q.map((text) => translate(text, source, target, alternatives ?? 3))
 			);
 			return json({
 				detectedLanguage: results.map((r) => r.detectedLanguage),
@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			});
 		} else {
 			// Handle single text
-			const result = await translate(q, source, target, alternatives);
+			const result = await translate(q, source, target, alternatives ?? 3);
 			return json(result);
 		}
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
