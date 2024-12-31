@@ -23,6 +23,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			// Handle single text
 			const result = await translate(q, source, target, alternatives);
 			return json(result);
+		}
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
 		return json(
