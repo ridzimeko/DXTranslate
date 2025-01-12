@@ -15,9 +15,9 @@ export const POST: RequestHandler = async ({ request }) => {
 				q.map((text) => translate(text, source, target, alternatives ?? 3))
 			);
 			return json({
-				detectedLanguage: results.map((r) => r.detectedLanguage),
-				translatedText: results.map((r) => r.translatedText),
-				alternatives: results.map((r) => r.alternatives)
+				detectedLanguage: results.map((r) => r?.detectedLanguage),
+				translatedText: results.map((r) => r?.translatedText),
+				alternatives: results.map((r) => r?.alternatives)
 			});
 		} else {
 			// Handle single text

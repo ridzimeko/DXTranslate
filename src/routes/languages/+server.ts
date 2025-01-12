@@ -10,18 +10,15 @@ interface Language {
 
 const createLanguageList = (): Language[] => {
 	// Get all language codes except 'AUTO' and convert to lowercase
-	const targetLanguages = langs
-		.filter((lang) => lang.code !== 'AUTO')
-		.map((lang) => lang.code.toLowerCase());
+	const filteredLanguages = langs.filter((lang) => lang.code !== 'AUTO');
+	const targetLanguages = filteredLanguages.map((lang) => lang.code.toLowerCase());
 
 	// Create the final language list with source languages and their targets
-	const languageList: Language[] = langs
-		.filter((lang) => lang.code !== 'AUTO')
-		.map((lang) => ({
-			code: lang.code.toLowerCase(),
-			name: lang.name,
-			targets: targetLanguages
-		}));
+	const languageList: Language[] = filteredLanguages.map((lang) => ({
+		code: lang.code.toLowerCase(),
+		name: lang.name,
+		targets: targetLanguages
+	}));
 
 	return languageList;
 };
