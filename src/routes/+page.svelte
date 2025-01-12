@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { ArrowRightLeft } from 'lucide-svelte';
 	import { langs } from '$lib/constants/langs';
+	import { writable } from 'svelte/store';
+	import { onMount } from 'svelte';
 	import type { TranslateResult } from '$lib/translate';
 	import LangSelect from '$lib/components/LangSelect.svelte';
 	import DxTextareaInput from '$lib/components/DXTextareaInput.svelte';
@@ -12,9 +14,19 @@
 	let detectedLang = '';
 	let isLoading = false;
 
-	// Selected source and target language state
-	let source_lang = 'AUTO';
-	let target_lang = 'EN';
+	// Placeholder nilai awal
+	let source_lang = writable('');
+	let target_lang = writable('');
+
+	onMount(() => {
+		// Initialize values from localStorage on the client-side
+		source_lang.set(localStorage.getItem('source_lang') || 'AUTO');
+		target_lang.set(localStorage.getItem('target_lang') || 'EN');
+		
+		// Sync language data with localStorage
+		source_lang.subscribe((value) => localStorage.setItem('source_lang', value));
+		target_lang.subscribe((value) => localStorage.setItem('target_lang', value));
+	});
 
 	async function getTranslate() {
 		if (!text) {
@@ -46,10 +58,10 @@
 	}
 
 	function swapLangHandler() {
-		if (source_lang.toUpperCase() === 'AUTO') {
-			source_lang = detectedLang || 'EN';
+		if ($source_lang.toUpperCase() === 'AUTO') {
+			$source_lang = detectedLang || 'EN';
 		}
-		[source_lang, target_lang] = [target_lang, source_lang];
+		[$source_lang, $target_lang] = [$target_lang, $source_lang];
 		[text, translatedText] = [translatedText, text];
 	}
 </script>
@@ -58,14 +70,14 @@
 	<div class="lang-select">
 		<LangSelect
 			label="Source language"
-			bind:value={source_lang}
+			bind:value={$source_lang}
 			on:change={getTranslate}
 			{detectedLang}
 			{langs}
 		/>
 		<button
 			on:click={swapLangHandler}
-			disabled={source_lang === 'AUTO' && !detectedLang}
+			disabled={$source_lang === 'AUTO' && !detectedLang}
 			class="swap-button"
 			title="Swap language"
 		>
@@ -73,7 +85,7 @@
 		</button>
 		<LangSelect
 			label="Target language"
-			bind:value={target_lang}
+			bind:value={$target_lang}
 			on:change={getTranslate}
 			langs={langs.slice(1)}
 		/>
