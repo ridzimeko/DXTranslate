@@ -38,8 +38,8 @@
 
 		isLoading = true;
 		const body = {
-			source: source_lang,
-			target: target_lang,
+			source: $source_lang,
+			target: $target_lang,
 			q: text
 		};
 
